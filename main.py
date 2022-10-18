@@ -19,7 +19,6 @@ def drawAll(img, buttonList):
         w, h = button.size
         cv2.rectangle(cam_img, button.pos, (x + w, y + h), (255,0,255),cv2.FILLED)
         cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4) 
-
     return img
 
 class button():
@@ -37,12 +36,19 @@ while True:
     sucess, cam_img = cap_cam.read()
     cam_img = detector.findHands(cam_img)
     lm_list, bboxInfo = detector.findPosition(cam_img)
-    cam_img = cv2.flip(cam_img, 1)
+    #cam_img = cv2.flip(cam_img, 1)
     cam_img = drawAll(cam_img, buttonList)
-    
- 
-   
-    
+
+    if lm_list:
+        for button in buttonList:
+            x, y = button.pos
+            w, h = button.size
+
+            if x < lm_list[8][0] < x + w and y < lm_list[8][1] < y + h:
+                cv2.rectangle(cam_img, button.pos, (x + w, y + h), (0, 255, 0), cv2.FILLED)
+                cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4) 
+                
+
     cv2.imshow("image", cam_img)
     if cv2.waitKey(1) == ord('q'): 
         break
