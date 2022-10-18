@@ -1,6 +1,7 @@
 from cv2 import FONT_HERSHEY_COMPLEX, FONT_HERSHEY_PLAIN
 from cvzone.HandTrackingModule import HandDetector
 import cv2  
+from time import sleep
 
 cap_cam = cv2.VideoCapture(0)
 
@@ -12,6 +13,8 @@ detector = HandDetector(maxHands = 2, detectionCon = 1)
 keys = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
         ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";"],
         ["Z", "X", "C", "V", "B","N", "M", ",", ".", "/"]]
+
+finalText = ""
 
 def drawAll(img, buttonList):
     for button in buttonList:
@@ -45,9 +48,21 @@ while True:
             w, h = button.size
 
             if x < lm_list[8][0] < x + w and y < lm_list[8][1] < y + h:
-                cv2.rectangle(cam_img, button.pos, (x + w, y + h), (0, 255, 0), cv2.FILLED)
+                cv2.rectangle(cam_img, button.pos, (x + w, y + h), (175, 0, 175), cv2.FILLED)
                 cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4) 
                 
+                l,_,_ = detector.findDistance(8, 12, cam_img, draw = False)
+                print(l)
+
+                if l < 30:
+                    cv2.rectangle(cam_img, button.pos, (x + w, y + h), (0, 255, 0), cv2.FILLED)
+                    cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4)
+
+                    finalText += button.text
+                    sleep(0.15)
+
+    cv2.rectangle(cam_img, (50, 350), (700, 450), (175, 0, 175), cv2.FILLED)
+    cv2.putText(cam_img, finalText, (60, 430), cv2.FONT_HERSHEY_PLAIN, 5, (255, 255, 255), 5) 
 
     cv2.imshow("image", cam_img)
     if cv2.waitKey(1) == ord('q'): 
