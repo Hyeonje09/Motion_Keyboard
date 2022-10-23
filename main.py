@@ -10,7 +10,7 @@ cap_cam.set(4, 720)
 
 detector = HandDetector(maxHands = 2, detectionCon = 1)
 
-keys = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+keys = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "<"],
         ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";"],
         ["Z", "X", "C", "V", "B","N", "M", ",", ".", "/"]]
 
@@ -54,12 +54,17 @@ while True:
                 l,_,_ = detector.findDistance(8, 12, cam_img, draw = False)
                 print(l)
 
-                if l < 40:
+                if l < 45:
                     cv2.rectangle(cam_img, button.pos, (x + w, y + h), (0, 255, 0), cv2.FILLED)
                     cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4)
 
-                    finalText += button.text
-                    sleep(0.15)
+                    if button.text != "<":
+                        finalText += button.text
+
+                    elif button.text == "<":
+                        finalText += " "
+
+                    sleep(0.175)
 
     cv2.rectangle(cam_img, (50, 350), (700, 450), (175, 0, 175), cv2.FILLED)
     cv2.putText(cam_img, finalText, (60, 430), cv2.FONT_HERSHEY_PLAIN, 5, (255, 255, 255), 5) 
