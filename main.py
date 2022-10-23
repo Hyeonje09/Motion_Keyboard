@@ -54,7 +54,7 @@ while True:
                 l,_,_ = detector.findDistance(8, 12, cam_img, draw = False)
                 print(l)
 
-                if l < 30:
+                if l < 40:
                     cv2.rectangle(cam_img, button.pos, (x + w, y + h), (0, 255, 0), cv2.FILLED)
                     cv2.putText(cam_img, button.text, (x + 20, y + 65), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 4)
 
